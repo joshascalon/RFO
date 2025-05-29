@@ -3,62 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electronic Component Test Results</title>
+    <title>RFO Experimental Phase Validation Data</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
+            background:#000; 
+            font-family:'Inter',sans-serif; 
+            color:#fff;
+            text-rendering: optimizeLegibility;
+            overflow-x: hidden;
         }
+        
+        /* Animated background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(139,92,246,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0,212,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255,0,153,0.05) 0%, transparent 50%);
+            z-index: -1;
+            animation: bgFlow 20s ease-in-out infinite;
+        }
+        
+        @keyframes bgFlow {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+        }
+        
         .container {
             max-width: 1400px;
             margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
         }
+        
+        h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(145deg, #fff 0%, #00d4ff 20%, #8b5cf6 40%, #ff0099 60%, #00ff88 80%, #fff 100%);
+            background-size: 600% 600%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: heroFlow 12s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(139,92,246,0.3));
+        }
+        
+        h2 {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+            color: rgba(255,255,255,0.9);
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
+        }
+        
+        @keyframes heroFlow { 
+            0%,100%{background-position:0% 0%} 
+            50%{background-position:100% 100%} 
+        }
+        
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 30px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .back-button:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+        
+        .back-button::before {
+            content: '←';
+            font-size: 1.2rem;
+        }
+        
         .chart-container {
-            background: white;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.02) 0%, rgba(0,212,255,0.01) 30%, rgba(139,92,246,0.005) 70%, transparent 100%);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 40px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(2px);
+            transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
+            position: relative;
+            overflow: hidden;
         }
+        
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, transparent, rgba(139,92,246,0.2), transparent, rgba(0,212,255,0.2));
+            background-size: 400% 400%;
+            border-radius: 30px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: borderGlow 4s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        .chart-container:hover::before {
+            opacity: 1;
+        }
+        
+        @keyframes borderGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
         .chart-wrapper {
             position: relative;
             height: 400px;
-            margin-bottom: 20px;
+            margin: 30px 0;
         }
-        h1, h2 {
-            color: #333;
+        
+        .summary {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(5px);
         }
+        
+        .summary p {
+            margin: 5px 0;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .summary strong {
+            color: rgba(255,255,255,0.95);
+            font-weight: 600;
+        }
+        
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 14px;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 15px;
+            overflow: hidden;
         }
+        
         .data-table th, .data-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 12px;
             text-align: left;
         }
+        
         .data-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
+            background: rgba(139,92,246,0.1);
+            font-weight: 600;
+            color: rgba(255,255,255,0.95);
+            letter-spacing: 0.02em;
         }
+        
         .data-table tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background: rgba(255,255,255,0.01);
         }
-        .summary {
-            background: #e8f4f8;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+        
+        .data-table tr:hover {
+            background: rgba(139,92,246,0.05);
+            transition: background 0.3s ease;
+        }
+        
+        .data-table td {
+            color: rgba(255,255,255,0.8);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 60px 15px 40px;
+            }
+            
+            .chart-container {
+                padding: 25px;
+            }
+            
+            .back-button {
+                top: 15px;
+                left: 15px;
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .chart-wrapper {
+                height: 300px;
+            }
+            
+            .data-table {
+                font-size: 0.8rem;
+            }
+            
+            .data-table th, .data-table td {
+                padding: 8px;
+            }
+        }
+        
+        /* Loading animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.8);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
     </style>
 </head>
 <body>
+    <div class="loading" id="loading">
+        <div class="loading-text">LOADING VALIDATION DATA...</div>
+    </div>
+    
+    <a href="index.html" class="back-button">BACK TO MAIN</a>
+    
     <div class="container">
-        <h1>Electronic Component Test Results Dashboard</h1>
+        <h1>EXPERIMENTAL PHASE VALIDATION DATA</h1>
         
         <!-- 1. MOSFET IRF540N Test - 03/09/21 -->
         <div class="chart-container">
@@ -794,7 +1019,7 @@
                 }
             });
 
-            // 10. IRFZ44N Thermal & VDS Chart
+            // 10. IRFZ44N MOSFET Test
             const irfz44nCtx = document.getElementById('irfz44nChart').getContext('2d');
             new Chart(irfz44nCtx, {
                 type: 'line',
@@ -951,13 +1176,13 @@
                     labels: Array.from({length: 61}, (_, i) => i * 10),
                     datasets: [{
                         label: 'Control',
-                        data: [40, 45, 50, 55, 60, 65, 68, 70, 72, 74, 75, 76, 77, 78, 79, 79.5, 80, 80.5, 81, 81.5, 82, 82.5, 83, 83.5, 84, 84.2, 84.4, 84.6, 84.8, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 84, 82, 78, 72, 65],
+                        data: [40, 45, 50, 55, 60, 65, 68, 70, 72, 74, 75, 76, 77, 78, 79, 79.5, 80, 80.5, 81, 81.5, 82, 82.5, 83, 83.5, 84, 84.2, 84.4, 84.6, 84.8, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 84, 82, 78, 72, 65],
                         borderColor: '#ff0099',
                         backgroundColor: 'rgba(255, 0, 153, 0.1)',
                         tension: 0.1
                     }, {
                         label: 'RFO Treated',
-                        data: [40, 44, 48, 52, 56, 60, 63, 65, 67, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 79.5, 80, 80.5, 81, 81.5, 82, 82.2, 82.4, 82.6, 82.8, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 82, 80, 76, 70, 63],
+                        data: [40, 44, 48, 52, 56, 60, 63, 65, 67, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 79.5, 80, 80.5, 81, 81.5, 82, 82.2, 82.4, 82.6, 82.8, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 82, 80, 76, 70, 63],
                         borderColor: '#00d4ff',
                         backgroundColor: 'rgba(0, 212, 255, 0.1)',
                         tension: 0.1
