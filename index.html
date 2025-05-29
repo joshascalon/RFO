@@ -433,6 +433,15 @@
           n.onclick = () => navigateTo(m + 1);
           nav.appendChild(n);
         }
+
+        // Add "EXPERIMENTAL PHASE VALIDATION DATA" button on the last page
+        if (m === totalMovements - 1) {
+          const dataButton = document.createElement('button');
+          dataButton.className = 'nav-button';
+          dataButton.textContent = 'EXPERIMENTAL PHASE VALIDATION DATA';
+          dataButton.onclick = () => window.location.href = 'component-test-chartsvvv.html';
+          nav.appendChild(dataButton);
+        }
       }
       
       function navigateTo(m) {
